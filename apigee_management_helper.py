@@ -77,7 +77,7 @@ class apigee_management_helper(object):
 
         # Request headers
         request_headers = {
-            "Accept": "application/xml"
+            "Accept": "application/json"
         }
 
         trace_list_response = self.session.get(trace_list_url)
