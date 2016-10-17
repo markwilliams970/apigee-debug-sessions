@@ -109,8 +109,8 @@ class apigee_management_helper(object):
 
         traces_array = []
 
-        for trace in trace_list:
-            trace_data = self.get_trace_data(apiname, revision, sessionid, trace)
-            traces_array.append(trace_data)
+        for trace_id in trace_list:
+            trace_data = self.get_trace_data(apiname, revision, sessionid, trace_id)
+            traces_array.append({"trace_id":trace_id, "trace_data":trace_data})
 
         return traces_array
