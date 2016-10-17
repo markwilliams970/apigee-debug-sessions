@@ -33,7 +33,7 @@ class apigee_management_helper(object):
         uuid_var = uuid.uuid4()
         uuid_str = uuid_var.urn
 
-        # Strip off the pre-pended part of the urn output
+        # Strip off the pre-pended part of the urn output (8 chars)
         nice_uuid = uuid_str[9:]
         return nice_uuid
 

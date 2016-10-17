@@ -9,7 +9,7 @@ try:
     apigee_username       = os.environ['APIGEE_USER']
     apigee_password       = os.environ['APIGEE_PASSWORD']
 except Exception, e:
-    print "Please set APIGEE_USER, APIGEE_PASSWORD credential environment variables"
+    print "Please set APIGEE_USER, APIGEE_PASSWORD credentials as environment variables"
     sys.exit()
 
 apigee_config = {
