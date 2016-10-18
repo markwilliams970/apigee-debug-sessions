@@ -16,7 +16,7 @@ pip install requests
 </pre>
 
 # Authentication Environment variables
-The script expects environment variables for the credentials of an Apigee organization admin to be set as follows:
+The script expects environment variables for the credentials of an Apigee organization admin to be set as follows (substituting actual credentials, of course):
 <pre>
 export APIGEE_USER=user@company.com
 export APIGEE_PASSWORD=t0ps3cr3t
