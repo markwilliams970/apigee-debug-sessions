@@ -60,6 +60,7 @@ Finished! Debug session written to file: myorg-test-helloworld_markw_20161013-2_
 </pre>
 
 # Loading trace file into the Edge UI
+* Make note of location and name of file output by the script per usage example above
 * Login to Apigee, navigate to APIs -> API Proxies
 * Click "Offline Trace" Button
 * Navigate to the file output from your trace session and load
