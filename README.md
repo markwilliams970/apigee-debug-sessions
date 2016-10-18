@@ -62,11 +62,9 @@ Finished! Debug session written to file: myorg-test-helloworld_markw_20161013-2_
 # Loading trace file into the Edge UI
 * Make note of location and name of file output by the script per usage example above
 ![Screenshot01](https://raw.githubusercontent.com/markwilliams970/apigee-debug-sessions/master/images/screenshot01.png)
-* Login to Apigee, navigate to APIs -> API Proxies
+* Login to Apigee, navigate to APIs -> API Proxies; Click "Offline Trace" Button
 ![Screenshot02](https://raw.githubusercontent.com/markwilliams970/apigee-debug-sessions/master/images/screenshot02.png)
-* Click "Offline Trace" Button
-![Screenshot03](https://raw.githubusercontent.com/markwilliams970/apigee-debug-sessions/master/images/screenshot03.png)
 * Navigate to the file output from your trace session and load
-![Screenshot04](https://raw.githubusercontent.com/markwilliams970/apigee-debug-sessions/master/images/screenshot04.png)
+![Screenshot03](https://raw.githubusercontent.com/markwilliams970/apigee-debug-sessions/master/images/screenshot03.png)
 * Review traces in UI
-![Screenshot05](https://raw.githubusercontent.com/markwilliams970/apigee-debug-sessions/master/images/screenshot05.png)
+![Screenshot05](https://raw.githubusercontent.com/markwilliams970/apigee-debug-sessions/master/images/screenshot04.png)
