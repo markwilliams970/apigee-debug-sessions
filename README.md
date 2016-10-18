@@ -6,6 +6,9 @@ This is a simple python script that will create a Debug Session using the Apigee
 If traces are collected during the session, the script will output a debug session file in a format that can be imported into the Edge UI for
 visual review and inspection.
 
+This can be a convenient way to facilitate a bit more extensive session tracing than the Edge UI permits, as the Edge UI will only allow collection
+of a maximum of 20 traces at a time.
+
 # Pre-requisites
 * Python ~= v2.7.10
 * Python [requests](http://docs.python-requests.org/en/master/) ~= 2.11.1

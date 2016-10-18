@@ -40,11 +40,11 @@ def get_iso_datetime_string():
     # current date/time
     now = datetime.utcnow()
 
-    significant_digits = 3
-    num_digits         = significant_digits - 6
+    significant_digits      = 3
+    num_digits              = significant_digits - 6
     assert num_digits < 0
-    now_rounded = now.replace(microsecond = int(round(now.microsecond, num_digits)))
-    now_rounded_string = datetime.strftime(now_rounded, '%Y-%m-%dT%H:%M:%S.%fZ')[:num_digits]+'Z'
+    now_rounded             = now.replace(microsecond = int(round(now.microsecond, num_digits)))
+    now_rounded_string      = datetime.strftime(now_rounded, '%Y-%m-%dT%H:%M:%S.%fZ')[:num_digits]+'Z'
     return now_rounded_string
 
 def trace_header(sessionid):
@@ -166,12 +166,12 @@ def main(args):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--management-host', nargs=1, help="The hostname of the management server. Defaults to api.enterprise.apigee.com.",
-                        default="api.enterprise.apigee.com")
-    parser.add_argument('--organization', nargs=1, help="The Apigee organization name, e.g. 'mycompany'")
-    parser.add_argument('--environment', nargs=1, help="The Apigee environment name, e.g. 'test'")
-    parser.add_argument('--timeout', nargs=1, help="The time in seconds during which to collect traces via debugsession. --timeout 300 will run traces for 5 minutes.")
-    parser.add_argument('--proxy', nargs=1, help="The name of the proxy to run traces on, e.g. 'orders'")
-    parser.add_argument('--revision', nargs=1, help="The revision number of the (deployed) proxy to debug, e.g. 2")
+                                             default="api.enterprise.apigee.com")
+    parser.add_argument('--organization',    nargs=1, help="The Apigee organization name, e.g. 'mycompany'")
+    parser.add_argument('--environment',     nargs=1, help="The Apigee environment name, e.g. 'test'")
+    parser.add_argument('--timeout',         nargs=1, help="The time in seconds during which to collect traces via debugsession. --timeout 300 will run traces for 5 minutes.")
+    parser.add_argument('--proxy',           nargs=1, help="The name of the proxy to run traces on, e.g. 'orders'")
+    parser.add_argument('--revision',        nargs=1, help="The revision number of the (deployed) proxy to debug, e.g. 2")
     parser.parse_args()
 
     missing_args = []
@@ -207,12 +207,12 @@ if __name__ == '__main__':
         sys.exit(1)
 
     processed_opts = {
-        "mgmt_url": "https://%s" % (opts.management_host),
-        "organization": opts.organization[0],
-        "environment": opts.environment[0],
-        "timeout": timeout_int,
-        "proxy": opts.proxy[0],
-        "revision": opts.revision[0]
+        "mgmt_url"     : "https://%s" % (opts.management_host),
+        "organization" : opts.organization[0],
+        "environment"  : opts.environment[0],
+        "timeout"      : timeout_int,
+        "proxy"        : opts.proxy[0],
+        "revision"     : opts.revision[0]
     }
 
     main(processed_opts)
