@@ -1,57 +1,117 @@
 import json
+import argparse
 import os, sys, time
 import pprint
 
 from apigee_management_helper import apigee_management_helper
 
-# Check for apigee credentials in environment
-try:
-    apigee_username       = os.environ['APIGEE_USER']
-    apigee_password       = os.environ['APIGEE_PASSWORD']
-except Exception, e:
-    print "Please set APIGEE_USER, APIGEE_PASSWORD credentials as environment variables"
-    sys.exit()
+def main(args):
 
-apigee_config = {
-    "mgmt_url"        : "https://api.enterprise.apigee.com",
-    "apigee_version"  : "v1",
-    "username"        : apigee_username,
-    "password"        : apigee_password,
-    "organization"    : "my_organization",
-    "environment"     : "test"
-}
+    # Check for apigee credentials in environment
+    try:
+        apigee_username       = os.environ['APIGEE_USER']
+        apigee_password       = os.environ['APIGEE_PASSWORD']
+    except Exception, e:
+        print "Please set APIGEE_USER, APIGEE_PASSWORD credentials as environment variables"
+        sys.exit(1)
 
-my_apigee_connection = apigee_management_helper(apigee_config)
+    apigee_config = {
+        "mgmt_url"        : args['mgmt_url'],
+        "apigee_version"  : "v1",
+        "username"        : apigee_username,
+        "password"        : apigee_password,
+        "organization"    : args['organization'],
+        "environment"     : args['environment']
+    }
 
-# Name of Proxy
-apiname               = "my_api_proxy"
+    my_apigee_connection = apigee_management_helper(apigee_config)
 
-# Proxy Revision Number (make sure this is the one that is deployed!)
-revision_number       = 2
+    # Name of Proxy
+    proxy                 = args['proxy']
 
-# Length of debug session in seconds
-session_timeout       = 120
+    # Proxy Revision Number (make sure this is the one that is deployed!)
+    revision              = args['revision']
 
-# Time in seconds before end of session to start retrieving traces from session
-epsilon               = 30
+    # Length of debug session in seconds
+    timeout               = args['timeout']
 
-# Sleep interval
-sleep                 = session_timeout - epsilon
+    # Time in seconds before end of session to start retrieving traces from session
+    epsilon               = 30
 
-# Start the debug session
-print "Creating the debug session..."
-debug_session_id      = my_apigee_connection.create_debug_session(apiname, revision_number, session_timeout)
+    # Sleep interval
+    sleep                 = timeout - epsilon
 
-print "Debug session %s created..." % debug_session_id
+    # Start the debug session
+    print "Creating the debug session..."
+    debug_session_id      = my_apigee_connection.create_debug_session(proxy, revision, timeout)
 
-# Wait for session traces to collect
-print "Collecting traces for %s seconds...." % sleep
-time.sleep(epsilon)
+    print "Debug session %s created..." % debug_session_id
 
-# Collect trace data
-print "Collecting trace data..."
-trace_data            = my_apigee_connection.get_all_trace_data(apiname, revision_number, debug_session_id)
+    # Wait for session traces to collect
+    print "Collecting traces for %s seconds...." % sleep
+    time.sleep(epsilon)
 
-# Output trace data
-for trace in trace_data:
-   print trace
+    # Collect trace data
+    print "Collecting trace data..."
+    trace_data            = my_apigee_connection.get_all_trace_data(proxy, revision, debug_session_id)
+
+    if len(trace_data) == 0:
+        print "No traces collected! This could be because there was no traffic to the proxy during the debug session."
+    else:
+        # Output trace data
+        for trace in trace_data:
+           print trace
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--management-host', nargs=1, help="The hostname of the management server. Defaults to api.enterprise.apigee.com.",
+                        default="api.enterprise.apigee.com")
+    parser.add_argument('--organization', nargs=1, help="The Apigee organization name, e.g. 'mycompany'")
+    parser.add_argument('--environment', nargs=1, help="The Apigee environment name, e.g. 'test'")
+    parser.add_argument('--timeout', nargs=1, help="The time in seconds during which to collect traces via debugsession. --timeout 300 will run traces for 5 minutes.")
+    parser.add_argument('--proxy', nargs=1, help="The name of the proxy to run traces on, e.g. 'orders'")
+    parser.add_argument('--revision', nargs=1, help="The revision number of the (deployed) proxy to debug, e.g. 2")
+    parser.parse_args()
+
+    missing_args = []
+    opts = parser.parse_args()
+
+    # Check for needed arguments
+    if opts.organization is None:
+        missing_args.append('organization')
+    if opts.environment is None:
+        missing_args.append('environment')
+    if opts.timeout is None:
+        missing_args.append('timeout')
+    if opts.proxy is None:
+        missing_args.append('proxy')
+    if opts.revision is None:
+        missing_args.append('revision')
+
+    if len(missing_args) > 0:
+        missing_args_warning = 'Please include all of these arguments: '
+        missing_args_list = ', '.join(missing_args)
+        print "===================================================="
+        print missing_args_warning
+        print missing_args_list
+        print "===================================================="
+        parser.print_help()
+        sys.exit(1)
+
+    # De-construct opts array
+    try:
+        timeout_int = int(opts.timeout[0])
+    except Exception, e:
+        print "Please use an integer value for timeout."
+        sys.exit(1)
+
+    processed_opts = {
+        "mgmt_url": "https://%s" % (opts.management_host),
+        "organization": opts.organization[0],
+        "environment": opts.environment[0],
+        "timeout": timeout_int,
+        "proxy": opts.proxy[0],
+        "revision": opts.revision[0]
+    }
+
+    main(processed_opts)

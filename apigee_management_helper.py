@@ -58,8 +58,9 @@ class apigee_management_helper(object):
 
         response = self.session.post(debug_session_url, data={}, headers=request_headers)
         if response.status_code != 201:
-            warnings.warn("Error creating Debug session for Revision %s of %s in Environment %s" % (revision, apiname,
-                self.environment))
+            print "Error creating Debug session for Revision %s of %s in Environment %s" % (revision, apiname, self.environment)
+            print "Received response status: %s" % response.status_code
+            sys.exit(1)
         else:
             print "Created Debug session %s for Revision %s of %s in Environment %s" % (sessionid, revision, apiname,
                 self.environment)
