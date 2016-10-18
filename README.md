@@ -3,7 +3,8 @@
 
 ## Description:
 This is a simple python script that will create a Debug Session using the Apigee Mangement API, for a given API Proxy and Revision.
-If traces are collected during the session, the script will output a debug session file in a format that can be imported into the Edge UI for review
+If traces are collected during the session, the script will output a debug session file in a format that can be imported into the Edge UI for
+visual review and inspection.
 
 # Pre-requisites
 * Python ~= v2.7.10
