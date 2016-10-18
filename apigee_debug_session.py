@@ -1,9 +1,67 @@
-import json
 import argparse
 import os, sys, time
-import pprint
+from datetime import datetime
+
+# XML Libs
+from xml.etree.ElementTree import XML
+from xml.etree.ElementTree import dump as XMLDump
 
 from apigee_management_helper import apigee_management_helper
+
+def get_xml_header(organization, environment, proxy, revision):
+
+    datetime_string = get_iso_datetime_string()
+
+    xml_header = \
+        """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+        <DebugSession>
+        <Retrieved>%s</Retrieved>
+        <Organization>%s</Organization>
+        <Environment>%s</Environment>
+        <API>%s</API>
+        <Revision>%s</Revision>
+        <SessionId></SessionId>
+        <Messages>""" % (datetime_string, organization, environment, proxy, revision)
+
+    return xml_header
+
+def get_xml_footer():
+    xml_file_footer = \
+        """
+        </Messages>
+        </DebugSession>"""
+    return xml_file_footer
+
+def get_iso_datetime_string():
+    # The UI can be a bit finicky about the ISO-8601 datetime string. Python outputs
+    # 6 digits after the decimal for the seconds. The Edge UI doesn't like this.
+    # This function will output an ISO-8601 string with only 3 significant digits after decimal in seconds
+
+    # current date/time
+    now = datetime.utcnow()
+
+    significant_digits = 3
+    num_digits         = significant_digits - 6
+    assert num_digits < 0
+    now_rounded = now.replace(microsecond = int(round(now.microsecond, num_digits)))
+    now_rounded_string = datetime.strftime(now_rounded, '%Y-%m-%dT%H:%M:%S.%fZ')[:num_digits]+'Z'
+    return now_rounded_string
+
+def trace_header(sessionid):
+    trace_header_string = \
+        """
+        <Message>
+        <DebugId>%s</DebugId>
+        <Data>""" % sessionid
+    return trace_header_string
+
+def trace_footer():
+    trace_footer_string = \
+        """
+        </Data>
+        </Message>
+        """
+    return trace_footer_string
 
 def main(args):
 
@@ -56,11 +114,52 @@ def main(args):
     trace_data            = my_apigee_connection.get_all_trace_data(proxy, revision, debug_session_id)
 
     if len(trace_data) == 0:
-        print "No traces collected! This could be because there was no traffic to the proxy during the debug session."
+        print "No traces collected!"
+        print "This could be because there was no traffic to the proxy %s during the debug session." % proxy
     else:
+        # Process trace data
+        # Parse xml
         # Output trace data
+
+        xml_file_header = get_xml_header(apigee_config['organization'], apigee_config['environment'], proxy, revision)
+
+        # Re-direct stdout to file
+        orig_stdout = sys.stdout
+        filename    = "%s-%s-%s-%s_%s.xml" % (apigee_config['organization'], apigee_config['environment'], proxy,
+                                              revision, debug_session_id)
+        output_file = file(filename, 'wb')
+        sys.stdout = output_file
+
+        # Output XML File header
+        print xml_file_header
+
         for trace in trace_data:
-           print trace
+            trace_id          = trace['trace_id']
+            trace_xml_text    = trace['trace_xml']
+
+            trace_xml         = XML(trace_xml_text)
+
+            # Output trace header, including the trace_id
+            print trace_header(trace_id)
+
+            # Output each trace, omitting trace-by-trace <?xml/> tag
+            for elem in trace_xml:
+                if len(elem) > 0 and elem is not None:
+                    XMLDump(elem)
+
+            # For each trace output the trace footer
+            print trace_footer()
+
+        # Finally output the XML File footer
+        print get_xml_footer()
+
+        # Close the output file
+        output_file.close()
+
+        # Re-direct stdout back to stdout
+        sys.stdout = orig_stdout
+
+        print "Finished! Debug session written to file: %s" % filename
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
