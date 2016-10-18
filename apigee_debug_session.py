@@ -33,7 +33,7 @@ def get_xml_footer():
     return xml_file_footer
 
 def get_iso_datetime_string():
-    # The UI can be a bit finicky about the ISO-8601 datetime string. Python outputs
+    # The Edge clearUI can be a bit finicky about the ISO-8601 datetime string. Python outputs
     # 6 digits after the decimal for the seconds. The Edge UI doesn't like this.
     # This function will output an ISO-8601 string with only 3 significant digits after decimal in seconds
 

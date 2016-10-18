@@ -7,7 +7,7 @@ and outputs a debug session file in a format that can be imported into the Edge 
 
 # Pre-requisites
 * Python ~= v2.7.10
-* Python requests ~= 2.11.1
+* Python [requests](http://docs.python-requests.org/en/master/) ~= 2.11.1
 * xml.etree.ElementTree (Standard python library)
  
 # Load pre-requisites using pip
@@ -45,3 +45,22 @@ arguments:
   --revision REVISION   The revision number of the (deployed) proxy to debug,
                         e.g. 2
 </pre>
+
+# Usage Example:
+<pre>
+python apigee_debug_session.py --organization 'myorg' --environment 'test' --timeout 300 --proxy 'helloworld_markw_20161013' --revision 2
+Creating the debug session...
+Created Debug session 1b6043ff-7750-4eb5-bc88-2a365f47f47c for Revision 2 of helloworld_markw_20161013 in Environment test
+Debug session 1b6043ff-7750-4eb5-bc88-2a365f47f47c created...
+Collecting traces for 270 seconds....
+This represents a session length of 300 seconds
+_minus_ a pre-defined interval of 30 seconds during which trace data is downloaded and processed
+Collecting trace data...
+Finished! Debug session written to file: myorg-test-helloworld_markw_20161013-2_1b6043ff-7750-4eb5-bc88-2a365f47f47c.xml
+</pre>
+
+# Loading trace file into the Edge UI
+* Login to Apigee, navigate to APIs -> API Proxies
+* Click "Offline Trace" Button
+* Navigate to the file output from your trace session and load
+* Review traces in UI
