@@ -48,7 +48,7 @@ arguments:
 
 # Usage Example:
 <pre>
-python apigee_debug_session.py --organization 'myorg' --environment 'test' --timeout 300 --proxy 'helloworld_markw_20161013' --revision 2
+$ python apigee_debug_session.py --organization 'myorg' --environment 'test' --timeout 300 --proxy 'helloworld_markw_20161013' --revision 2
 Creating the debug session...
 Created Debug session 1b6043ff-7750-4eb5-bc88-2a365f47f47c for Revision 2 of helloworld_markw_20161013 in Environment test
 Debug session 1b6043ff-7750-4eb5-bc88-2a365f47f47c created...
