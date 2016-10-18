@@ -107,7 +107,9 @@ def main(args):
 
     # Wait for session traces to collect
     print "Collecting traces for %s seconds...." % sleep
-    time.sleep(epsilon)
+    print "This represents a session length of %s seconds" % timeout
+    print "_minus_ a pre-defined interval of %s seconds during which trace data is downloaded and processed" % epsilon
+    time.sleep(sleep)
 
     # Collect trace data
     print "Collecting trace data..."

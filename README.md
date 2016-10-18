@@ -10,10 +10,13 @@ and outputs a debug session file in a format that can be imported into the Edge 
 * Python requests ~= 2.11.1
 * xml.etree.ElementTree (Standard python library)
  
-# Install: Pre-requisites using pip
+# Load pre-requisites using pip
 <pre>
 pip install requests
 </pre>
+
+# Authentication Environment variables
+The script expects environment variables for the k
 
 # Usage: 
 <pre>
