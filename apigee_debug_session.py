@@ -81,6 +81,9 @@ def main(args):
         # Output XML File header
         print xml_file_header
 
+        # Loop through the traces and write them to the file, including header and footer
+        # needed for display in Edge UI
+        
         for trace in trace_data:
             trace_id          = trace['trace_id']
             trace_xml_text    = trace['trace_xml']
