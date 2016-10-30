@@ -43,7 +43,7 @@ arguments:
   --environment ENVIRONMENT
                         The Apigee environment name, e.g. 'test'
   --timeout TIMEOUT     The time in seconds during which to collect traces via
-                        debugsession. --timeout 300 will run traces for 5
+                        debugsession. --timeout 120 will run traces for 2
                         minutes.
   --proxy PROXY         The name of the proxy to run traces on, e.g. 'orders'
   --revision REVISION   The revision number of the (deployed) proxy to debug,
