@@ -7,62 +7,7 @@ from xml.etree.ElementTree import XML
 from xml.etree.ElementTree import dump as XMLDump
 
 from apigee_management_helper import apigee_management_helper
-
-def get_xml_header(organization, environment, proxy, revision):
-
-    datetime_string = get_iso_datetime_string()
-
-    xml_header = \
-        """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-        <DebugSession>
-        <Retrieved>%s</Retrieved>
-        <Organization>%s</Organization>
-        <Environment>%s</Environment>
-        <API>%s</API>
-        <Revision>%s</Revision>
-        <SessionId></SessionId>
-        <Messages>""" % (datetime_string, organization, environment, proxy, revision)
-
-    return xml_header
-
-def get_xml_footer():
-    xml_file_footer = \
-        """
-        </Messages>
-        </DebugSession>"""
-    return xml_file_footer
-
-def get_iso_datetime_string():
-    # The Edge UI can be a bit finicky about the ISO-8601 datetime string. Python outputs
-    # 6 digits after the decimal for the seconds. The Edge UI doesn't like this.
-    # This function will output an ISO-8601 string with only 3 significant digits after decimal in seconds
-
-    # current date/time
-    now = datetime.utcnow()
-
-    significant_digits      = 3
-    num_digits              = significant_digits - 6
-    assert num_digits < 0
-    now_rounded             = now.replace(microsecond = int(round(now.microsecond, num_digits)))
-    now_rounded_string      = datetime.strftime(now_rounded, '%Y-%m-%dT%H:%M:%S.%fZ')[:num_digits]+'Z'
-    return now_rounded_string
-
-def trace_header(sessionid):
-    trace_header_string = \
-        """
-        <Message>
-        <DebugId>%s</DebugId>
-        <Data>
-        <Completed>true</Completed>""" % sessionid
-    return trace_header_string
-
-def trace_footer():
-    trace_footer_string = \
-        """
-        </Data>
-        </Message>
-        """
-    return trace_footer_string
+from apigee_debug_xml_utils import apigee_debug_xml_utils
 
 def main(args):
 
@@ -83,7 +28,8 @@ def main(args):
         "environment"     : args['environment']
     }
 
-    my_apigee_connection = apigee_management_helper(apigee_config)
+    my_apigee_connection  = apigee_management_helper(apigee_config)
+    my_debug_xml_utils        = apigee_debug_xml_utils()
 
     # Name of Proxy
     proxy                 = args['proxy']
@@ -124,7 +70,7 @@ def main(args):
         # Parse xml
         # Output trace data
 
-        xml_file_header = get_xml_header(apigee_config['organization'], apigee_config['environment'], proxy, revision)
+        xml_file_header = my_debug_xml_utils.get_xml_header(apigee_config['organization'], apigee_config['environment'], proxy, revision)
 
         # Re-direct stdout to file
         orig_stdout = sys.stdout
@@ -143,7 +89,7 @@ def main(args):
             trace_xml         = XML(trace_xml_text)
 
             # Output trace header, including the trace_id
-            print trace_header(trace_id)
+            print my_debug_xml_utils.trace_header(trace_id)
 
             # Output each trace, omitting trace-by-trace <?xml/> tag
             for elem in trace_xml:
@@ -151,10 +97,10 @@ def main(args):
                     XMLDump(elem)
 
             # For each trace output the trace footer
-            print trace_footer()
+            print my_debug_xml_utils.trace_footer()
 
         # Finally output the XML File footer
-        print get_xml_footer()
+        print my_debug_xml_utils.get_xml_footer()
 
         # Close the output file
         output_file.close()
