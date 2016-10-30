@@ -1,6 +1,5 @@
 import argparse
 import os, sys, time
-from datetime import datetime
 
 # XML Libs
 from xml.etree.ElementTree import XML
@@ -29,7 +28,7 @@ def main(args):
     }
 
     my_apigee_connection  = apigee_management_helper(apigee_config)
-    my_debug_xml_utils        = apigee_debug_xml_utils()
+    my_debug_xml_utils    = apigee_debug_xml_utils()
 
     # Name of Proxy
     proxy                 = args['proxy']
@@ -43,7 +42,7 @@ def main(args):
     # Time in seconds before end of session to start retrieving traces from session
     epsilon               = 30
 
-    # Sleep interval
+    # Trace data collection/download interval
     sleep                 = timeout - epsilon
 
     # Start the debug session
@@ -86,6 +85,7 @@ def main(args):
             trace_id          = trace['trace_id']
             trace_xml_text    = trace['trace_xml']
 
+            # Convert raw text to parsed XML Object
             trace_xml         = XML(trace_xml_text)
 
             # Output trace header, including the trace_id
