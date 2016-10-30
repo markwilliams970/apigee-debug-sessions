@@ -112,13 +112,13 @@ def main(args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--management-host', nargs=1, help="The hostname of the management server. Defaults to api.enterprise.apigee.com.",
-                                             default="api.enterprise.apigee.com")
-    parser.add_argument('--organization',    nargs=1, help="The Apigee organization name, e.g. 'mycompany'")
-    parser.add_argument('--environment',     nargs=1, help="The Apigee environment name, e.g. 'test'")
-    parser.add_argument('--timeout',         nargs=1, help="The time in seconds during which to collect traces via debugsession. --timeout 300 will run traces for 5 minutes.")
-    parser.add_argument('--proxy',           nargs=1, help="The name of the proxy to run traces on, e.g. 'orders'")
-    parser.add_argument('--revision',        nargs=1, help="The revision number of the (deployed) proxy to debug, e.g. 2")
+    parser.add_argument('--management-host',  nargs=1, help="The hostname of the management server. Defaults to api.enterprise.apigee.com.",
+                                              default="api.enterprise.apigee.com")
+    parser.add_argument('--organization',     nargs=1, help="The Apigee organization name, e.g. 'mycompany'")
+    parser.add_argument('--environment',      nargs=1, help="The Apigee environment name, e.g. 'test'")
+    parser.add_argument('--timeout',          nargs=1, help="The time in seconds during which to collect traces via debugsession. --timeout 300 will run traces for 5 minutes.")
+    parser.add_argument('--proxy',            nargs=1, help="The name of the proxy to run traces on, e.g. 'orders'")
+    parser.add_argument('--revision',         nargs=1, help="The revision number of the (deployed) proxy to debug, e.g. 2")
     parser.parse_args()
 
     missing_args = []
