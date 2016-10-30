@@ -52,7 +52,8 @@ def trace_header(sessionid):
         """
         <Message>
         <DebugId>%s</DebugId>
-        <Data>""" % sessionid
+        <Data>
+        <Completed>true</Completed>""" % sessionid
     return trace_header_string
 
 def trace_footer():
