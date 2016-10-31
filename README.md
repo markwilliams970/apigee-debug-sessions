@@ -14,7 +14,6 @@ See http://docs.apigee.com/api/debug-sessions for more information on the Manage
 # Pre-requisites
 * Python ~= v2.7.10
 * Python [requests](http://docs.python-requests.org/en/master/) ~= 2.11.1
-* xml.etree.ElementTree (Standard python library)
  
 # Load pre-requisites using pip
 <pre>
