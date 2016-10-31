@@ -9,6 +9,8 @@ visual review and inspection.
 This can be a convenient way to facilitate a bit more extensive session tracing than the Edge UI permits, as the Edge UI will only allow collection
 of a maximum of 20 traces at a time.
 
+See http://docs.apigee.com/api/debug-sessions for more information on the Management API involved.
+
 # Pre-requisites
 * Python ~= v2.7.10
 * Python [requests](http://docs.python-requests.org/en/master/) ~= 2.11.1
@@ -42,17 +44,21 @@ arguments:
                         The Apigee organization name, e.g. 'mycompany'
   --environment ENVIRONMENT
                         The Apigee environment name, e.g. 'test'
-  --timeout TIMEOUT     The time in seconds during which to collect traces via
-                        debugsession. --timeout 120 will run traces for 2
-                        minutes.
   --proxy PROXY         The name of the proxy to run traces on, e.g. 'orders'
   --revision REVISION   The revision number of the (deployed) proxy to debug,
                         e.g. 2
+  --timeout TIMEOUT     The time in seconds to collect traces via
+                        debugsession. --timeout 90 will run traces for 90
+                        seconds. The maximumn is 120, or 20 traces, whichever
+                        comes first.
+  --sessions SESSIONS   The number of times to iteratively collect
+                        debugsessions. Maximum of 50.
 </pre>
 
 # Usage Example:
 <pre>
-$ python apigee_debug_session.py --organization 'myorg' --environment 'test' --timeout 180 --proxy 'helloworld_markw_20161013' --revision 2
+$ python apigee_debug_session.py --organization "gsc" --environment "test" --proxy "helloworld_markw_20161013" --revision 2 --timeout 40 --sessions 20
+Collecting session: 1 of 20...
 Creating the debug session...
 Created Debug session 1b6043ff-7750-4eb5-bc88-2a365f47f47c for Revision 2 of helloworld_markw_20161013 in Environment test
 Debug session 1b6043ff-7750-4eb5-bc88-2a365f47f47c created...
@@ -62,6 +68,23 @@ _minus_ a pre-defined interval of 30 seconds during which trace data is download
 Collecting trace data...
 Finished! Debug session written to file: myorg-test-helloworld_markw_20161013-2_1b6043ff-7750-4eb5-bc88-2a365f47f47c.xml
 </pre>
+
+# Usage Notes:
+The script collects traces for a maximum of 120 seconds, or 20 traces per session, whichever comes first. Any traces
+collected must be downloaded before the session timeout. As a result, by default, the script  is configured to allow 30 
+seconds for collecting/downloading traces.
+
+For example, if you specify a timeout of 120 seconds, the script will specify a timeout of 120
+seconds when making the management API call. However, the tool  will collect traces for only 90 seconds, allowing as
+much as 30 seconds to collect and download trace data.
+
+See http://docs.apigee.com/api/debug-sessions for more information.
+
+Depending on how active your proxy is in terms of transactions per second, you may need to run 
+the script a few times to get a feel for the timeout parameter. For a busy
+proxy, the maximum 20 traces/session could be reached very quickly, so a timeout value of as low
+as 31 seconds could realistically be used as the desired value. This would allow trace collection
+for 1 second, with 30 seconds to collect and download trace data.
 
 # Loading trace file into the Edge UI
 * Make note of location and name of file output by the script per usage example above
