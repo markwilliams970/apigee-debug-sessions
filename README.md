@@ -40,11 +40,15 @@ required arguments:
 
   --organization ORGANIZATION
                         The Apigee organization name, e.g. 'mycompany'
+ 
   --environment ENVIRONMENT
                         The Apigee environment name, e.g. 'test'
+  
   --proxy PROXY         The name of the proxy to run traces on, e.g. 'orders'
+ 
   --revision REVISION   The revision number of the (deployed) proxy to debug,
                         e.g. 2
+ 
   --timeout TIMEOUT     The time in seconds to collect traces via
                         debugsession. --timeout 90 will run traces for 90
                         seconds. The maximumn is 120, or 20 traces, whichever
@@ -53,9 +57,11 @@ required arguments:
 optional arguments:
 
   -h, --help            show this help message and exit
+ 
   --management-host MANAGEMENT_HOST
                         The hostname of the management server. Defaults to
                         api.enterprise.apigee.com.
+ 
   --sessions SESSIONS   The number of times to iteratively collect
                         debugsessions. Maximum of 50. Defaults to 1.
                                                                         
@@ -63,7 +69,8 @@ optional arguments:
 
 # Usage Example:
 <pre>
-$ python apigee_debug_session.py --organization "gsc" --environment "test" --proxy "helloworld_markw_20161013" --revision 2 --timeout 40 --sessions 20
+$ python apigee_debug_session.py --organization "gsc" --environment "test" \
+    --proxy "helloworld_markw_20161013" --revision 2 --timeout 40 --sessions 20
 Collecting session: 1 of 20...
 Creating the debug session...
 Created Debug session 1b6043ff-7750-4eb5-bc88-2a365f47f47c for Revision 2 of helloworld_markw_20161013 in Environment test
