@@ -68,7 +68,7 @@ optional arguments:
 
 # Usage Example:
 <pre>
-$ python apigee_debug_session.py --organization "gsc" --environment "test" \
+$ python apigee_debug_session.py --organization "myorg" --environment "test" \
     --proxy "helloworld_markw_20161013" --revision 2 --timeout 40 --sessions 20
 Collecting session: 1 of 20...
 Creating the debug session...
