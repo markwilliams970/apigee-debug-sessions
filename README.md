@@ -32,14 +32,12 @@ export APIGEE_PASSWORD=t0ps3cr3t
 <pre>
 usage: apigee_debug_session.py [-h] [--management-host MANAGEMENT_HOST]
                                [--organization ORGANIZATION]
-                               [--environment ENVIRONMENT] [--timeout TIMEOUT]
-                               [--proxy PROXY] [--revision REVISION]
+                               [--environment ENVIRONMENT] [--proxy PROXY]
+                               [--revision REVISION] [--timeout TIMEOUT]
+                               [--sessions SESSIONS]
+                               
+required arguments:
 
-arguments:
-  -h, --help            show this help message and exit
-  --management-host MANAGEMENT_HOST
-                        The hostname of the management server. Defaults to
-                        api.enterprise.apigee.com.
   --organization ORGANIZATION
                         The Apigee organization name, e.g. 'mycompany'
   --environment ENVIRONMENT
@@ -51,8 +49,16 @@ arguments:
                         debugsession. --timeout 90 will run traces for 90
                         seconds. The maximumn is 120, or 20 traces, whichever
                         comes first.
+
+optional arguments:
+
+  -h, --help            show this help message and exit
+  --management-host MANAGEMENT_HOST
+                        The hostname of the management server. Defaults to
+                        api.enterprise.apigee.com.
   --sessions SESSIONS   The number of times to iteratively collect
-                        debugsessions. Maximum of 50.
+                        debugsessions. Maximum of 50. Defaults to 1.
+                                                                        
 </pre>
 
 # Usage Example:
