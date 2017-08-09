@@ -97,7 +97,8 @@ def main(args):
         "username"        : apigee_username,
         "password"        : apigee_password,
         "organization"    : args['organization'],
-        "environment"     : args['environment']
+        "environment"     : args['environment'],
+        "filters"         : args['filters']
     }
 
     organization          = apigee_config["organization"]
@@ -139,11 +140,12 @@ if __name__ == '__main__':
     parser.add_argument('--timeout',          nargs=1, help="The time in seconds to collect traces via debugsession. --timeout 90 will run traces for 90 seconds. The maximumn is 120, or 20 traces, whichever comes first.")
     parser.add_argument('--sessions',         nargs=1, help="The number of times to iteratively collect debugsessions. Maximum of 50.",
                                               default="1")
+    parser.add_argument('--filters',         nargs='*', help="Filters. Usage: --filters key1:val1 key2:val2 .")
     parser.parse_args()
 
     missing_args = []
     opts = parser.parse_args()
-
+    
     # Check for needed arguments
     if opts.organization is None:
         missing_args.append('organization')
@@ -201,7 +203,8 @@ if __name__ == '__main__':
         "proxy"        : opts.proxy[0],
         "revision"     : opts.revision[0],
         "timeout"      : timeout_int,
-        "sessions"     : sessions_int
+        "sessions"     : sessions_int,
+        "filters"      : opts.filters
     }
 
     main(processed_opts)
