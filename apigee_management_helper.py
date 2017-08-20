@@ -11,7 +11,7 @@ class apigee_management_helper(object):
         self.organization      = config['organization']               # Name of user's organization
         self.environment       = config['environment']                # Name of user's environment
         self.config            = config
-
+        self.filters           = config['filters']
         # Instantiate a session with some default configuration params
         self.session           = requests.Session()
         self.session.timeout   = 10.0
@@ -37,6 +37,14 @@ class apigee_management_helper(object):
         nice_uuid = uuid_str[9:]
         return nice_uuid
 
+    #adds filters to the debug session
+    def add_filters(self, url):
+        if self.filters:
+            for f in self.filters:
+                k,v = f.split(":")
+                url = "%s&%s=%s" %(url, k, v)
+        return url
+    
     # Debug session url
     def create_debug_session_url(self, sessionid, apiname, revision, timeout):
         return "%s/%s/organizations/%s/environments/%s/apis/%s/revisions/%s/debugsessions?session=%s&timeout=%s" % \
@@ -55,7 +63,7 @@ class apigee_management_helper(object):
 
         # Create url
         debug_session_url = self.create_debug_session_url(sessionid, apiname, revision, timeout)
-
+        debug_session_url = self.add_filters(debug_session_url)
         response = self.session.post(debug_session_url, data={}, headers=request_headers)
         if response.status_code != 201:
             print "Error creating Debug session for Revision %s of %s in Environment %s" % (revision, apiname, self.environment)
