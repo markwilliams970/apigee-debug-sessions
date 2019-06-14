@@ -133,6 +133,10 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--management-host',  nargs=1, help="The hostname of the management server. Defaults to api.enterprise.apigee.com.",
                                               default="api.enterprise.apigee.com")
+    parser.add_argument('--management-port',  nargs=1, help="The port of the management server. Defaults to 443",
+                                              default="443")
+    parser.add_argument('--management-proto',  nargs=1, help="The protocol for the management server. Defaults to https",
+                                              default="https")
     parser.add_argument('--organization',     nargs=1, help="The Apigee organization name, e.g. 'mycompany'")
     parser.add_argument('--environment',      nargs=1, help="The Apigee environment name, e.g. 'test'")
     parser.add_argument('--proxy',            nargs=1, help="The name of the proxy to run traces on, e.g. 'orders'")
@@ -197,7 +201,7 @@ if __name__ == '__main__':
         sys.exit(1)
 
     processed_opts = {
-        "mgmt_url"     : "https://%s" % (opts.management_host),
+        "mgmt_url"     : "%s://%s:%s" % (opts.management_proto[0], opts.management_host[0], opts.management_port[0]),
         "organization" : opts.organization[0],
         "environment"  : opts.environment[0],
         "proxy"        : opts.proxy[0],
